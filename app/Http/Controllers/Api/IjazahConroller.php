@@ -67,7 +67,7 @@ class IjazahConroller extends Controller
                 return new ApiResource(false, 'gagal membuat pengajuan', '');
             }
         } else {
-            return response()->json('harus mengisi file', 422);
+            return response()->json("Isi nama", 422);
         }
 
     }
