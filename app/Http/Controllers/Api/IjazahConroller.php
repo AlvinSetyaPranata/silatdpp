@@ -34,6 +34,7 @@ class IjazahConroller extends Controller
             'perubahan' => 'required',
             'alasan' => 'required',
             'file' => 'required',
+            'files.*' => 'mimes:png,jpg,jpeg,pdf',
         ]);
 
         if ($validasi->fails()) {
