@@ -39,6 +39,7 @@ class SppdPengajuanController extends Controller
     public function store(Request $request)
     {
         
+        // return response()->json($request->hasFile("file"));
         
         // Validasi inputan dari front end
         $validator = Validator::make($request->all(), [
@@ -47,11 +48,11 @@ class SppdPengajuanController extends Controller
             'tempat_kegiatan' => 'required',
             'tanggal_kegiatan' => 'required',
             'files' => 'required',
-            'files.*' => 'mimes:png,jpg,jpeg,pdf',
+            // 'files.*' => 'image',
             
         ]);
         
-        return response()->json($request->all(), 200) ;
+        // return response()->json($request->all(), 200) ;
         
         // cek jika hasil validasi error
         if ($validator->fails()) {

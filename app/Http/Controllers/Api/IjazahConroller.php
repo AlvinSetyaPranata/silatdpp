@@ -26,6 +26,7 @@ class IjazahConroller extends Controller
      */
     public function store(Request $request)
     {
+
         $validasi = Validator::make($request->all(), [
             'institusi_id' => 'required',
             'nomor_ijazah' => 'required',
@@ -34,7 +35,7 @@ class IjazahConroller extends Controller
             'perubahan' => 'required',
             'alasan' => 'required',
             'file' => 'required',
-            'files.*' => 'mimes:png,jpg,jpeg,pdf',
+            // 'file.*' => 'mimes:png,jpg,jpeg,pdf',
         ]);
 
         if ($validasi->fails()) {
