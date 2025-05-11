@@ -4,13 +4,10 @@ export const baseApiSlice = createApi({
     reducerPath: "persistedApi",
     baseQuery: fetchBaseQuery({ 
         baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
-        prepareHeaders: (headers, {getState, endpoint}) => {
+        prepareHeaders: (headers, {getState}) => {
             const token = (getState() as RootState).auth.token
-            const needsAuth = ['updateDivision', 'updateInstitution', 'updateBudget']
-
-            if (token && needsAuth.includes(endpoint)) {
-                headers.set('Authorization', `Bearer ${token}`)
-            }
+            
+            headers.set('Authorization', `Bearer ${token}`)
 
             return headers
         }
