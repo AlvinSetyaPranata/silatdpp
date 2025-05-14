@@ -9,7 +9,8 @@ import InputFields from "@/components/Fields/InputFields";
 import Modal from "@/components/Modal";
 
 import { BudgetDataType } from "@/types/pages/budget";
-import { useGetBudgetsQuery, useUpdateBudgetsMutation } from "@/services/budget/endpoints";
+import { useDeleteBudgetsMutation, useGetBudgetsQuery, useUpdateBudgetsMutation } from "@/services/budget/endpoints";
+import { toast } from "react-toastify";
 
 
 const Page: React.FC = () => {
@@ -18,7 +19,8 @@ const Page: React.FC = () => {
     const [selectedData, setSelectedData] = useState<BudgetDataType>(DEFAULT_BUDGET_DATA);
 
     const { data, isLoading } = useGetBudgetsQuery({})
-    const [updateBudget] = useUpdateBudgetsMutation()
+    const [updateBudget, { isLoading: isUpdating, isError: updateError, isSuccess: isUpdated}] = useUpdateBudgetsMutation()
+    const [deleteBudget, { isLoading: isDeleting, isError: deleteError, isSuccess: isDeleted }] = useDeleteBudgetsMutation()
 
     const handleSelectedData = (data: BudgetDataType) => {
         setShowPopup(true);
@@ -45,6 +47,54 @@ const Page: React.FC = () => {
         },
     ]
 
+
+    useEffect(() => {
+            if (isUpdating) {
+                toast.info("Memperbarui data divisi", { position: "top-right" });
+                return;
+            }
+    
+            if (updateError) {
+                toast.error("Gagal memperbarui data divisi", {
+                    position: "top-right",
+                });
+            }
+    
+            if (isUpdated) {
+                toast.success("Berhasil memperbarui data divisi", {
+                    position: "top-right",
+                });
+    
+                setShowPopup(false);
+    
+                const timeout = setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+                return () => clearTimeout(timeout);
+            }
+        }, [isUpdating]);
+    
+        useEffect(() => {
+            if (isDeleting) {
+                toast.info("Menghapus data divisi", { position: "top-right" });
+                return;
+            }
+    
+            if (deleteError) {
+                toast.error("Gagal menghapus data divisi", {
+                    position: "top-right",
+                });
+            }
+    
+            if (isDeleted) {
+                toast.success("Berhasil menghapus data divisi", {
+                    position: "top-right",
+                });
+    
+                setShowPopup(false);
+            }
+        }, [isDeleting]);
+
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Data tingkat biaya" />
@@ -61,7 +111,9 @@ const Page: React.FC = () => {
             <Modal
                 idItem={selectedData.id}
                 mutation={updateBudget}
+                deleteMutation={deleteBudget}
                 ableUpdate={true}
+                ableDelete={true}
                 title="Edit Biaya"
                 state={showPopup}
                 stateSetter={setShowPopup}
