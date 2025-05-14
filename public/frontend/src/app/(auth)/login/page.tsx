@@ -7,7 +7,7 @@ import { setToken } from "@/store/authSlice";
 import { toast } from "react-toastify";
 import useFetch from "@/hooks/useFetch";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetAllNewsQuery } from "@/services/news/endpoints";
+import { useGetNewsQuery } from "@/services/news/endpoints";
 
 export default function Page() {
     const router = useRouter();
@@ -16,7 +16,7 @@ export default function Page() {
 
     const [errors, setErrors] = useState({});
 
-    const { data: newsData, isError } = useGetAllNewsQuery();
+    const { data: newsData, isError } = useGetNewsQuery({});
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();

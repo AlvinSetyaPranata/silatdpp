@@ -4,17 +4,20 @@ import Breadcrumb from "@/components/Breadcrumb";
 import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import useFetch from "@/hooks/useFetch";
+import { useAddBudgetsMutation } from "@/services/budget/endpoints";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useStore } from "react-redux";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
 const BudgetAddDataPage: React.FC = () => {
-    const [isPending, fetchCaller] = useFetch();
     const [errors, setErrors] = useState({})
     const storeState = useStore().getState();
     const router = useRouter();
+
+    const [addBudget, { isLoading: isAdding, isError: errorAdding, isSuccess: successAdding }] = useAddBudgetsMutation()
+
 
     const formSchema = z.object({
         name: z.string().min(1, "Harap masukkan nama tingkat biaya")
@@ -38,26 +41,28 @@ const BudgetAddDataPage: React.FC = () => {
             return
         }
 
-        await fetchCaller("biaya", {
-            method: "post",
-            headers: {
-                Authorization: `Bearer ${storeState.token}`,
-            },
-            body: form,
-        }).then((res) => {
-            if (res.ok) {
-                toast.success("Data biaya telah ditambahkan", {
-                    position: "top-right",
-                });
-                router.push("/budget");
-                return;
-            }
-
-            toast.error("Gagal menambahkan data!", {
-                position: "top-right",
-            });
-        });
+        await addBudget(form)
     };
+
+
+    useEffect(() => {
+
+        if (isAdding) {
+            toast.info("Menambahkan data biaya", { position: 'top-right' })
+            return
+        }
+
+        if (errorAdding) {
+            toast.error("Gagal menambahkan data biaya", { position: 'top-right' })
+        }
+
+        if (successAdding) {
+            toast.success("Berhasil menambahkan data biaya", { position: 'top-right' })
+            window.location.reload()
+        }
+
+    }, [isAdding])
+    
 
     return (
         <DefaultLayout>
@@ -68,11 +73,11 @@ const BudgetAddDataPage: React.FC = () => {
                     name="name"
                     error={errors.biaya ? errors.biaya[0] : ""}
                 />
-                <div className="col-span-2">
+                <div className="col-span-2 flex gap-x-4">
                     <button
                         className="w-max flex justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
                     >
-                        {isPending ? (
+                        {isAdding ? (
                         <div className="flex gap-x-4">
                             <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                             Menambahkan
@@ -81,6 +86,7 @@ const BudgetAddDataPage: React.FC = () => {
                         <>Tambah Biaya</>
                     )}
                     </button>
+                    <button type="button" onClick={() => router.push("/budget")}  className="w-max flex justify-center rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90">Kembali</button>
                 </div>
             </form>
         </DefaultLayout>
