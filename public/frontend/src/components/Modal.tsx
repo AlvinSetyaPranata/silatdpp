@@ -19,7 +19,8 @@ interface PopupPropsType extends PropsWithChildren {
     ableDelete?: boolean;
     mutation?: RTKMutationFn<unknown, unknown>;
     deleteMutation?: RTKMutationFn<unknown, unknown>;
-    isLoading?: boolean;
+    isUpdating?: boolean;
+    isDeleting?: boolean;
     immutableData?: immutableDataType[];
 }
 
@@ -33,7 +34,8 @@ const Modal: React.FC<PopupPropsType> = ({
     ableDelete = false,
     mutation = null,
     deleteMutation = null,
-    isLoading = false,
+    isUpdating = false,
+    isDeleting = false,
     immutableData = [{ name: "", value: "" }],
 }) => {
     const [method, setMethod] = useState<"" | "update" | "delete">("");
@@ -103,7 +105,7 @@ const Modal: React.FC<PopupPropsType> = ({
                                 type="submit"
                                 onClick={() => setMethod("update")}
                             >
-                                {isLoading && method == "update" ? (
+                                {isUpdating && method == "update" ? (
                                     <>
                                         <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                                         Memperbarui Data
@@ -119,7 +121,7 @@ const Modal: React.FC<PopupPropsType> = ({
                                 type="submit"
                                 onClick={() => setMethod("delete")}
                             >
-                                {isLoading && method == "delete" ? (
+                                {isDeleting && method == "delete" ? (
                                     <>
                                         <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                                         Menghapus Data
