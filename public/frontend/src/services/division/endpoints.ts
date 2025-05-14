@@ -1,7 +1,7 @@
-import { baseApiSlice } from "./base";
+import { DivisionApiSlice } from "./base";
 
 
-export const divisionApi = baseApiSlice.injectEndpoints({
+export const divisionApi = DivisionApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDivisions: builder.query({
       query: () => "/divisi",

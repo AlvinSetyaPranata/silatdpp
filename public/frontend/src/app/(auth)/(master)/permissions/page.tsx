@@ -7,7 +7,7 @@ import { DEFAULT_PERMISSION_DATA } from "@/utils/constans"
 import React, { useEffect, useState } from "react"
 import Modal from "@/components/Modal";
 import InputFields from "@/components/Fields/InputFields"
-import { useGetPermissionsQuery, useUpdatePermissionMutation } from "@/services/permission"
+import { useGetPermissionsQuery, useUpdatePermissionMutation } from "@/services/permission/endpoints"
 
 const Page: React.FC = () => {
     const [showPopup, setShowPopup] = useState(false);

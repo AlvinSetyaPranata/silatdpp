@@ -6,8 +6,8 @@ import SelectFields from "@/components/Fields/SelectFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
-import { useGetInstitutionsQuery } from "@/services/institution";
-import { useGetStudentTransferQuery, useUpdateStudentTransferMutation } from "@/services/studentTransfer";
+import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetStudentTransferQuery, useUpdateStudentTransferMutation } from "@/services/student-transfer/endpoints";
 import { DEFAULT_STUDENT_TRANSFER_DATA } from "@/utils/constans";
 import { useState } from "react";
 

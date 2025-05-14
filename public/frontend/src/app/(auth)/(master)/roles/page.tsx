@@ -7,7 +7,7 @@ import Table from "@/components/Table";
 import { DEFAULT_ROLE_DATA } from "@/utils/constans";
 import Modal from "@/components/Modal";
 import { useState } from "react";
-import { useGetRolesQuery, useUpdateRoleMutation } from "@/services/role";
+import { useGetRolesQuery, useUpdateRoleMutation } from "@/services/role/endpoints";
 
 const Page: React.FC = () => {
 

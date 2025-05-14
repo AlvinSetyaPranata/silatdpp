@@ -8,7 +8,7 @@ import TextFields from "@/components/Fields/TextFields";
 import Form from "@/components/Forms";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import useFetch from "@/hooks/useFetch";
-import { useGetInstitutionsQuery } from "@/services/institution";
+import { useGetInstitutionsQuery } from "@/services/Institution/institution";
 import { FormEvent, useState } from "react";
 import { useStore } from "react-redux";
 import { toast } from "react-toastify";

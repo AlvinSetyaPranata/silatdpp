@@ -10,9 +10,9 @@ import SelectFields from "@/components/Fields/SelectFields";
 import { toast } from "react-toastify";
 import useFetch from "@/hooks/useFetch";
 import { z } from "zod";
-import { useGetGuestBooksQuery } from "@/services/guestBook";
-import { useGetInstitutionsQuery } from "@/services/institution";
-import { useGetDivisionsQuery } from "@/services/division";
+import { useGetGuestBooksQuery } from "@/services/guest-book/endpoints";
+import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetDivisionsQuery } from "@/services/division/endpoints";
 
 export default function GuestBookDetail() {
     const [isPending, fetchCaller] = useFetch();

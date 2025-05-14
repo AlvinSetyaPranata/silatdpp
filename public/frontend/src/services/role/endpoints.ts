@@ -1,5 +1,5 @@
 
-import { baseApiSlice } from "./base";
+import { baseApiSlice } from "../base";
 
 
 export const roleApi = baseApiSlice.injectEndpoints({

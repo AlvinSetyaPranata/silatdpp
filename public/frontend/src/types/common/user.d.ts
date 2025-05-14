@@ -9,3 +9,11 @@ export interface UserCredentialType {
     },
     roles: string[]
 }
+
+export interface ROLE_TYPE {
+    created_at: string;
+    guard_name: string;
+    id: string;
+    name: string
+    role_id: 2
+}

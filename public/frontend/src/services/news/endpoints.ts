@@ -1,11 +1,11 @@
-import { baseApiSlice } from "./base";
+import { NewsApiSlice } from "./base";
 
 
-export const permissionApi = baseApiSlice.injectEndpoints({
+export const newsApi = NewsApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPermissions: builder.query({
       query: () => "/hak-akses",
-      providesTags: ["Permissions"]
+      providesTags: ["News"]
     }),
     updatePermission: builder.mutation({
       query: ({ idItem, form }) => ({
@@ -13,9 +13,9 @@ export const permissionApi = baseApiSlice.injectEndpoints({
         method: 'PUT',
         body: new URLSearchParams(form)
       }),
-      invalidatesTags: ["Permissions"]
+      invalidatesTags: ["News"]
     })
   })
 })
 
-export const { useGetPermissionsQuery, useUpdatePermissionMutation } = permissionApi;
+export const { useGetPermissionsQuery, useUpdatePermissionMutation } = newsApi;

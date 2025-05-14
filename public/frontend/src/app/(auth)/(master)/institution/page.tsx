@@ -6,7 +6,7 @@ import { INSTITUTION_DEFAULT_DATA } from "@/utils/constans";
 import Modal from "@/components/Modal";
 import React, { useState } from "react";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/institution";
+import { useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/Institution/institution";
 import Breadcrumb from "@/components/Breadcrumb";
 
 const Institution: React.FC = () => {

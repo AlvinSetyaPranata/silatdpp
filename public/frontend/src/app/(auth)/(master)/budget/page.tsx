@@ -7,23 +7,23 @@ import { DEFAULT_BUDGET_DATA } from "@/utils/constans";
 import Table from "@/components/Table";
 import InputFields from "@/components/Fields/InputFields";
 import Modal from "@/components/Modal";
-import { useGetBudgetsQuery, useUpdateBudgetMutation } from "@/services/budget";
+
+import { BudgetDataType } from "@/types/pages/budget";
+import { useGetBudgetsQuery, useUpdateBudgetsMutation } from "@/services/budget/endpoints";
 
 
 const Page: React.FC = () => {
 
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedData, setSelectedData] = useState(DEFAULT_BUDGET_DATA);
+    const [selectedData, setSelectedData] = useState<BudgetDataType>(DEFAULT_BUDGET_DATA);
 
-    const { data, isLoading } = useGetBudgetsQuery()
-    const [updateBudget] = useUpdateBudgetMutation()
+    const { data, isLoading } = useGetBudgetsQuery({})
+    const [updateBudget] = useUpdateBudgetsMutation()
 
-    const handleSelectedData = (data) => {
+    const handleSelectedData = (data: BudgetDataType) => {
         setShowPopup(true);
         setSelectedData(data);
     };
-
-    useEffect(() => console.log(data), [data])
 
 
     const column = [
@@ -34,7 +34,7 @@ const Page: React.FC = () => {
         },
         {
             name: "Aksi",
-            cell: (row: Record<string, string>) => (
+            cell: (row: BudgetDataType) => (
                 <button
                     className="text-blue-500 hover:underline"
                     onClick={() => handleSelectedData(row)}

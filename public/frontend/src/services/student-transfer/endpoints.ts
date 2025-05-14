@@ -1,15 +1,15 @@
-import { baseApiSlice } from "./base";
+import { baseApiSlice } from "../base";
 
 
 export const studentTransferApi = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStudentTransfer: builder.query({
-      query: () => "/pindahan/siswa"
+      query: () => ""
     }),
 
     updateStudentTransfer: builder.mutation({
       query: ({ idItem, form }) => ({
-        url: `/pindahan/siswa/${idItem}`,
+        url: `/${idItem}`,
         method: "PUT",
         body: new URLSearchParams(form)
       })

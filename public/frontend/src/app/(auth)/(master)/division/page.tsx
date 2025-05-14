@@ -5,7 +5,7 @@ import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
-import { useGetDivisionsQuery, useUpdateDivisionMutation } from "@/services/division";
+import { useGetDivisionsQuery, useUpdateDivisionMutation } from "@/services/division/endpoints";
 import { DEFAULT_DIVISION_DATA } from "@/utils/constans";
 import { useState } from "react";
 

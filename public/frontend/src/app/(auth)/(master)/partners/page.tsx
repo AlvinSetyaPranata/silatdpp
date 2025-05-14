@@ -7,7 +7,7 @@ import { useState } from "react";
 import Modal from "@/components/Modal";
 import InputFields from "@/components/Fields/InputFields";
 import { DEFAULT_PARTNERS_DATA } from "@/utils/constans";
-import { useGetPartnersQuery, useUpdatePartnerMutation } from "@/services/partners";
+import { useGetPartnersQuery, useUpdatePartnerMutation } from "@/services/partner/endpoints";
 
 const Partner = () => {
     const [showPopup, setShowPopup] = useState(false);

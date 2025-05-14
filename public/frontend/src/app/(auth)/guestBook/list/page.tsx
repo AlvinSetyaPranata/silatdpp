@@ -6,7 +6,7 @@ import { GUEST_BOOK_DEFAULT_DATA } from "@/utils/constans";
 import Modal from "@/components/Modal";
 import React, { useEffect, useState } from "react";
 import InputFields from "@/components/Fields/InputFields";
-import { useDeleteGuestBookMutation, useGetGuestBooksQuery } from "@/services/guestBook";
+import { useDeleteGuestBookMutation, useGetGuestBooksQuery } from "@/services/guest-book/endpoints";
 
 const GuestBookPage: React.FC = () => {
     const [showPopup, setShowPopup] = useState(false);

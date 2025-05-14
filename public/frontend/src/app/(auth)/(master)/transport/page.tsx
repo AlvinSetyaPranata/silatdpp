@@ -7,7 +7,7 @@ import { DEFAULT_TRANSPORTATION } from "@/utils/constans";
 import React, { useState } from "react";
 import Modal from "@/components/Modal";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetTransportationsQuery, useUpdateTransportationMutation } from "@/services/transporation";
+import { useGetTransportationsQuery, useUpdateTransportationMutation } from "@/services/transportatition/endpoints";
 
 const Page: React.FC = () => {
     const [showPopup, setShowPopup] = useState(false);

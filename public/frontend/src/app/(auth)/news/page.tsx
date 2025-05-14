@@ -6,7 +6,7 @@ import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
-import { useGetAllNewsQuery, useUpdateNewsMutation } from "@/services/news";
+import { useGetAllNewsQuery, useUpdateNewsMutation } from "@/services/news/endpoints";
 import { DEFAULT_NEWS_DATA } from "@/utils/constans";
 import { useState } from "react";
 

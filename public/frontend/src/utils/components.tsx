@@ -27,12 +27,9 @@ const menuGroups = {
             sppd: {
                 icon: <FileIcon className="size-6 shrink-0 stroke-[1.5] stroke-white"/>,
                 label: "SPPD",
-                allowed_roles: ["superadmin", "administrasi", "karyawan", "kepala_sekolah", "admin_sekolah", "staf"],
-                route: "#",
-                children: [
-                    { label: "Pengajuan Sppd", route: "/sppd" },
-                    { label: "Daftar Sppd", route: "/sppd/list" },
-                ],
+                allowed_roles: ["superadmin", "administrasi", "karyawan", "kepala_sekolah", "admin_sekolah", "staf", "kabid", "kadis"],
+                route: "/sppd/list",
+
             },
             service: {
                 icon: <BookIcon className="size-6 shrink-0 stroke-[1.5] stroke-white"/>,
@@ -64,11 +61,8 @@ const menuGroups = {
                 icon:  <NewsIcon className="size-6 shrink-0 stroke-[1.5] stroke-white"/> ,
                 label: "Berita",
                 allowed_roles: ["superadmin", "staf", "kabid", "kadis", "administrasi"],
-                route: "#",
-                children: [
-                    { label: "List Berita", route: "/news" },
-                    { label: "Tambah Berita", route: "/news/addData" },
-                ],
+                route: "/news",
+
             },
             user_config: {
                 icon:  <UserConfigIcon className="size-6 shrink-0 stroke-[1.5] stroke-white"/>,

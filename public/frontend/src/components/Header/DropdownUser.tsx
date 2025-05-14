@@ -8,7 +8,7 @@ import { useStore } from "react-redux";
 import {  DEFAULT_PROFILE_DATA } from "@/utils/constans";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useGetAllUserQuery } from "@/services/users";
+import { useGetAllUserQuery } from "@/services/staff/endpoints";
 
 const DropdownUser = () => {
     const store = useStore();

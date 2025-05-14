@@ -1,6 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/Breadcrumb";
+import Detail from "@/components/Certificate/Detail";
 import InputFields from "@/components/Fields/InputFields";
 import SelectFields from "@/components/Fields/SelectFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
@@ -9,8 +10,8 @@ import Table from "@/components/Table";
 import {
     useGetCertificatesQuery,
     useUpdateCertificateMutation,
-} from "@/services/certificates";
-import { useGetInstitutionsQuery } from "@/services/institution";
+} from "@/services/cerificates/endpoints";
+import { useGetInstitutionsQuery } from "@/services/Institution/institution";
 import { DEFAULT_CERTIFICATE_DATA } from "@/utils/constans";
 import { useState } from "react";
 
@@ -23,8 +24,8 @@ const Page: React.FC = () => {
         setSelectedData(data);
     };
 
-    const { data: certificatesData } = useGetCertificatesQuery();
-    const { data: institutionsData } = useGetInstitutionsQuery();
+    const { data: certificatesData } = useGetCertificatesQuery({});
+    const { data: institutionsData } = useGetInstitutionsQuery({});
     const [updateCertificate] = useUpdateCertificateMutation();
 
     const columns = [
@@ -80,28 +81,7 @@ const Page: React.FC = () => {
                 addButtonName="Ajukan Permohonan"
                 addButtonLink="/certificates"
             />
-            <Modal
-                title="Edit Permohonan"
-                idItem={selectedData.id}
-                mutation={updateCertificate}
-                state={showPopup}
-                stateSetter={setShowPopup}
-                ableUpdate={true}
-                immutableData={[{name: "status", value: selectedData.status}]}
-            >
-                <InputFields title="Nama Siswa" name="nama_siswa" defaultValue={selectedData.nama_siswa} />
-                <InputFields title="NIS" type="number" name="nis" defaultValue={selectedData.nis}/>
-                <SelectFields title="Institusi" name="institusi_id" options={institutionsData ? institutionsData.data.map(institution => {
-                    return {
-                        name: institution.nama,
-                        value: institution.id
-                    }
-                }) : [{ name: "Tidak ada data", value: ""}]} defaultValue={selectedData.institusi_id}/>
-                 <InputFields title="Perubahan" name="perubahan" defaultValue={selectedData.perubahan}/>
-                 <InputFields title="Nomor Ijazah" name="nomor_ijazah" type="number" defaultValue={selectedData.nomor_ijazah} />
-                 <InputFields title="Alasan" name="alasan" defaultValue={selectedData.alasan}/>
-                 <InputFields title="status" defaultValue={selectedData.status} disabled={true}  />
-            </Modal>
+            <Detail selectedData={selectedData} setShowPopup={setShowPopup} showPopup={showPopup} />
         </DefaultLayout>
     );
 };

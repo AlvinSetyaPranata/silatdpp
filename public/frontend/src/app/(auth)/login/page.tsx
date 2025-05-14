@@ -7,7 +7,7 @@ import { setToken } from "@/store/authSlice";
 import { toast } from "react-toastify";
 import useFetch from "@/hooks/useFetch";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetAllNewsQuery } from "@/services/news";
+import { useGetAllNewsQuery } from "@/services/news/endpoints";
 
 export default function Page() {
     const router = useRouter();

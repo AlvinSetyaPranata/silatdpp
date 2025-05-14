@@ -1,4 +1,4 @@
-import { baseApiSlice } from "./base";
+import { baseApiSlice } from "../base";
 
 
 export const institutionApi = baseApiSlice.injectEndpoints({

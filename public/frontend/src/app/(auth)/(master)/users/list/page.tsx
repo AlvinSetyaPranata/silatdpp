@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useStore } from "react-redux";
 import Modal from "@/components/Modal";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetAllUserQuery } from "@/services/users";
-import { useGetRolesQuery } from "@/services/role";
+import { useGetAllUserQuery } from "@/services/staff/endpoints";
+import { useGetRolesQuery } from "@/services/role/endpoints";
 import SelectFields from "@/components/Fields/SelectFields";
 
 const Page: React.FC = () => {

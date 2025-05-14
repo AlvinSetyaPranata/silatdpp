@@ -1,7 +1,7 @@
-import { baseApiSlice } from "./base";
+import { GuestBookApiSlice } from "./base";
 
 
-export const guestBookApi = baseApiSlice.injectEndpoints({
+export const guestBookApi = GuestBookApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getGuestBooks: builder.query({
       query: () => "/buku-tamu",

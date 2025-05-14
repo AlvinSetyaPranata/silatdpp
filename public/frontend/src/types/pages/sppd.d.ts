@@ -23,7 +23,7 @@ export interface SppdDataType {
       updated_at: string;
     };
     approval: string;
-    dokumens: string[];
+    dokumens: File[];
     history: {
       id: string;
       nama: string;

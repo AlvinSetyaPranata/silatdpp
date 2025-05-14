@@ -6,8 +6,10 @@ import InputFields from "@/components/Fields/InputFields";
 import SelectFields from "@/components/Fields/SelectFields";
 import TextFields from "@/components/Fields/TextFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { useGetBudgetsQuery } from "@/services/budget";
-import { useGetTransportationsQuery } from "@/services/transporation";
+import { useGetBudgetsQuery } from "@/services/budget/endpoints";
+import { useGetTransportationsQuery } from "@/services/transportatition/endpoints";
+import { storeType } from "@/store";
+import { DEFAULT_SPPD_DATA } from "@/utils/constans";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useStore } from "react-redux";
@@ -16,12 +18,9 @@ import { z } from "zod";
 
 const SppdAddData: React.FC = () => {
     const [files, setFiles] = useState<File[]>([]);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState(DEFAULT_SPPD_DATA);
 
-    const store = useStore();
-    const state = store.getState();
-    const authState = state.auth;
-
+    const state = useStore().getState() as storeType;
     const router = useRouter()
 
     const baseSchema = z.object({
@@ -54,8 +53,8 @@ const SppdAddData: React.FC = () => {
             path: ["tanggal_berangkat"],
         });
 
-    const { data: budgetsData } = useGetBudgetsQuery();
-    const { data: transportationData } = useGetTransportationsQuery();
+    const { data: budgetsData } = useGetBudgetsQuery({});
+    const { data: transportationData } = useGetTransportationsQuery({});
 
     const handlePostData = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -113,7 +112,7 @@ const SppdAddData: React.FC = () => {
                 method: "post",
                 body: formData,
                 headers: {
-                    Authorization: `Bearer ${authState.token}`,
+                    Authorization: `Bearer ${state.auth.token}`,
                 },
             },
         );

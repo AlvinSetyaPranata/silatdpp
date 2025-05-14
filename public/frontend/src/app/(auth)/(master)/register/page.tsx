@@ -5,7 +5,7 @@ import InputFields from "@/components/Fields/InputFields";
 import SelectFields from "@/components/Fields/SelectFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import useFetch from "@/hooks/useFetch";
-import { useGetRolesQuery } from "@/services/role";
+import { useGetRolesQuery } from "@/services/role/endpoints";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { useStore } from "react-redux";
