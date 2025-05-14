@@ -1,11 +1,14 @@
 import { FormEvent, PropsWithChildren, useState } from "react";
 import { toast } from "react-toastify";
 
-
 type immutableDataType = {
     name: string;
-    value: string
-}
+    value: string;
+};
+
+type RTKMutationFn<Arg = any, Result = any> = (
+    arg: Arg,
+) => Promise<{ data: Result } | { error: any }>;
 
 interface PopupPropsType extends PropsWithChildren {
     title: string;
@@ -14,9 +17,9 @@ interface PopupPropsType extends PropsWithChildren {
     stateSetter: (state: boolean) => void;
     ableUpdate?: boolean;
     ableDelete?: boolean;
-    mutation?: unknown;
+    mutation?: RTKMutationFn<unknown, unknown>;
+    deleteMutation?: RTKMutationFn<unknown, unknown>;
     isLoading?: boolean;
-    expanded?: boolean;
     immutableData?: immutableDataType[];
 }
 
@@ -29,35 +32,34 @@ const Modal: React.FC<PopupPropsType> = ({
     ableUpdate = false,
     ableDelete = false,
     mutation = null,
+    deleteMutation = null,
     isLoading = false,
-    expanded = false,
-    immutableData = [{ name: "", value: ""}]
+    immutableData = [{ name: "", value: "" }],
 }) => {
-    const [method, setMethod] = useState("update");
+    const [method, setMethod] = useState<"" | "update" | "delete">("");
 
     const handleDataSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
+        if (method == "delete") {
+            if (!deleteMutation) {
+                return;
+            }
 
-        const form = new FormData(event.currentTarget)
+            await deleteMutation(idItem);
+        } else {
+            if (!mutation) {
+                return;
+            }
 
-        immutableData.map(data => form.append(data.name, data.value))
+            const form = new FormData(event.currentTarget);
 
-        const res = await mutation({idItem, form})
+            immutableData.map((data) => form.append(data.name, data.value));
 
-
-
-        if (!res.data.success) {
-            toast.error("Galat saat memperbarui data", {
-                position: "top-right",
-            });
-            return;
+            await mutation({ idItem, form });
         }
 
-        toast.success(`Berhasil ${method == "update" ? "Memperbarui" : "Menghapus"} data`, {
-            position: "top-right",
-        });
         stateSetter(false);
-        
     };
 
     return (
@@ -69,7 +71,7 @@ const Modal: React.FC<PopupPropsType> = ({
                 onClick={() => stateSetter(false)}
             ></div>
 
-            <div className="w-full min-h-screen bg-white p-4 overflow-y-auto">
+            <div className="min-h-screen w-full overflow-y-auto bg-white p-4">
                 <div className="flex w-full justify-between">
                     <h2 className="font-semibold text-black-2">{title}</h2>
                     <button onClick={() => stateSetter(false)}>
@@ -91,7 +93,7 @@ const Modal: React.FC<PopupPropsType> = ({
 
                 <form
                     onSubmit={handleDataSubmit}
-                    className="mt-8 flex flex-col md:grid md:grid-cols-2 gap-x-4 gap-y-8"
+                    className="mt-8 flex flex-col gap-x-4 gap-y-8 md:grid md:grid-cols-2"
                 >
                     {children}
                     <div className="col-span-2 flex gap-x-4">
