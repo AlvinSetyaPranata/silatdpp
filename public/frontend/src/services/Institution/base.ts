@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const InstitutionApiSlice = createApi({
     reducerPath: "InstitutionApi",
     baseQuery: fetchBaseQuery({ 
-        baseUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/divisi`,
+        baseUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/institusi`,
         prepareHeaders: (headers, {getState}) => {
             const token = (getState() as storeType).auth.token
 
@@ -13,6 +13,6 @@ export const InstitutionApiSlice = createApi({
             return headers
         }
     }),
-    tagTypes: ["GuestBooks"],
+    tagTypes: ["Institutions"],
     endpoints: () => ({})
 })
