@@ -3,19 +3,21 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import useFetch from "@/hooks/useFetch";
+import { useAddInstitutionMutation } from "@/services/Institution/institution";
+import { storeType } from "@/store";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useStore } from "react-redux";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
 export default function InstitutionAddData() {
-    const [isPending, fetchCaller] = useFetch();
     const [errors, setErrors] = useState({});
     const router = useRouter();
-    const store = useStore();
-    const authState = store.getState().auth;
+    const state = useStore().getState() as storeType;
+    const authState = state.auth;
+
+    const [addInstitution, { isLoading: isAdding, isSuccess: successAdding, isError: errorAdding }] = useAddInstitutionMutation();
 
     const schema = z.object({
         nama: z.string().min(1, "Nama tidak boleh kosong!"),
@@ -39,22 +41,35 @@ export default function InstitutionAddData() {
             return
         }
 
+        await addInstitution(data)
+    
+    };
 
-        await fetchCaller("institusi", {
-            method: "POST",
-            headers: {
-                Authorization: authState.token,
-            },
-            body: data,
-        })
-            .then(() => {
-                toast.success("Data institusi berhasil ditambahkan!", {
+
+     useEffect(() => {
+            if (isAdding) {
+                toast.info("Menambahkan data divisi", { position: "top-right" });
+                return;
+            }
+    
+            if (errorAdding) {
+                toast.error("Gagal menambahkan data divisi", {
                     position: "top-right",
                 });
-                router.push("/institution");
-            })
-            .catch(() => console.log("Error saat menambah data"));
-    };
+            }
+    
+            if (successAdding) {
+                toast.success("Berhasil menambahkan data divisi", {
+                    position: "top-right",
+                });
+    
+                const timeout = setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+    
+                return () => clearTimeout(timeout);
+            }
+        }, [isAdding]);
 
     return (
         <DefaultLayout>
@@ -67,12 +82,15 @@ export default function InstitutionAddData() {
                 <InputFields title="Nama Institusi" name="nama" error={errors.nama ? errors.nama[0] : ""}/>
                 <InputFields title="Alamat Institusi" name="alamat" error={errors.alamat ? errors.alamat[0] : ""}/>
                 <InputFields title="kontak Institusi" name="kontak" error={errors.kontak ? errors.kontak[0] : ""}/>
+                <div className="flex col-span-2 gap-x-4">
+
+                
                 <button
                     className="flex w-max col-span-2 columns-2 items-center justify-center gap-x-2 rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-opacity-75"
                     type="submit"
-                    disabled={isPending}
+                    disabled={isAdding}
                 >
-                    {isPending ? (
+                    {isAdding ? (
                         <>
                             <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                             Menambahkan Data
@@ -81,6 +99,10 @@ export default function InstitutionAddData() {
                         <>Tambahkan Institusi</>
                     )}
                 </button>
+                <button onClick={() => router.push("/institution")}  className="flex w-max col-span-2 columns-2 items-center justify-center gap-x-2 rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-opacity-75"
+                    type="button"
+                    >Kembali</button>
+                </div>
             </form>
         </DefaultLayout>
     );

@@ -4,16 +4,18 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Table from "@/components/Table";
 import { INSTITUTION_DEFAULT_DATA } from "@/utils/constans";
 import Modal from "@/components/Modal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputFields from "@/components/Fields/InputFields";
-import { useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/Institution/institution";
+import { useDeleteInstitutionMutation, useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/Institution/institution";
 import Breadcrumb from "@/components/Breadcrumb";
+import { toast } from "react-toastify";
 
 const Institution: React.FC = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedData, setSelectedData] = useState(INSTITUTION_DEFAULT_DATA);
-    const {data, isLoading } = useGetInstitutionsQuery()
-    const [updateInstitution] = useUpdateInstitutionMutation()
+    const {data, isLoading } = useGetInstitutionsQuery({})
+    const [updateInstitution, { isLoading: isUpdating, isError: updateError, isSuccess: isUpdated }] = useUpdateInstitutionMutation()
+    const [deleteInstitution, { isLoading: isDeleting, isError: deleteError, isSuccess: isDeleted }] = useDeleteInstitutionMutation()
 
     const handleSelectedData = (data) => {
         setShowPopup(true);
@@ -49,6 +51,53 @@ const Institution: React.FC = () => {
         },
     ];
 
+
+    useEffect(() => {
+            if (isUpdating) {
+                toast.info("Memperbarui data divisi", { position: "top-right" });
+                return;
+            }
+    
+            if (updateError) {
+                toast.error("Gagal memperbarui data divisi", {
+                    position: "top-right",
+                });
+            }
+    
+            if (isUpdated) {
+                toast.success("Berhasil memperbarui data divisi", {
+                    position: "top-right",
+                });
+    
+                
+                const timeout = setTimeout(() => {
+                    setShowPopup(false);
+                }, 1000);
+                return () => clearTimeout(timeout);
+            }
+        }, [isUpdating]);
+    
+        useEffect(() => {
+            if (isDeleting) {
+                toast.info("Menghapus data divisi", { position: "top-right" });
+                return;
+            }
+    
+            if (deleteError) {
+                toast.error("Gagal menghapus data divisi", {
+                    position: "top-right",
+                });
+            }
+    
+            if (isDeleted) {
+                toast.success("Berhasil menghapus data divisi", {
+                    position: "top-right",
+                });
+    
+                setShowPopup(false);
+            }
+        }, [isDeleting]);
+
     return (
         <DefaultLayout>
              <Breadcrumb pageName="Data Instansi" />
@@ -64,10 +113,14 @@ const Institution: React.FC = () => {
             <Modal
                 idItem={selectedData.id}
                 mutation={updateInstitution}
+                deleteMutation={deleteInstitution}
                 title="Edit Institusi"
+                isUpdating={isUpdating}
+                isDeleting={isDeleting}
                 state={showPopup}
                 stateSetter={setShowPopup}
                 ableUpdate={true}
+                ableDelete={true}
             >
                 <InputFields
                     title="Nama Institusi"
