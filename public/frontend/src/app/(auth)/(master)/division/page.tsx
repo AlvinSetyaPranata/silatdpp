@@ -5,22 +5,34 @@ import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
-import { useGetDivisionsQuery, useUpdateDivisionMutation } from "@/services/division/endpoints";
+import {
+    useDeleteDivisionMutation,
+    useGetDivisionsQuery,
+    useUpdateDivisionMutation,
+} from "@/services/division/endpoints";
+import { DivisionDataType } from "@/types/pages/division";
 import { DEFAULT_DIVISION_DATA } from "@/utils/constans";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const Division: React.FC = () => {
-    const [showPopup, setShowPopup] = useState(false)
-    const [selectedData, setSelectedData] = useState(DEFAULT_DIVISION_DATA)
-    
-    const {data, isLoading } = useGetDivisionsQuery()
-    const [updateDivision] = useUpdateDivisionMutation()
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedData, setSelectedData] = useState(DEFAULT_DIVISION_DATA);
 
-    const handleSelectedData = (data) => {
-        setShowPopup(true)
-        setSelectedData(data)
-    }
+    const { data, isLoading } = useGetDivisionsQuery({});
+    const [
+        updateDivision,
+        { isLoading: isUpdating, isError: updateError, isSuccess: isUpdated },
+    ] = useUpdateDivisionMutation();
+    const [
+        deleteDivision,
+        { isLoading: isDeleting, isError: deleteError, isSuccess: isDeleted },
+    ] = useDeleteDivisionMutation();
 
+    const handleSelectedData = (data: DivisionDataType) => {
+        setShowPopup(true);
+        setSelectedData(data);
+    };
 
     const columns = [
         {
@@ -30,7 +42,7 @@ const Division: React.FC = () => {
         },
         {
             name: "Aksi",
-            cell: (row: Record<string, string>) => (
+            cell: (row: DivisionDataType) => (
                 <button
                     className="text-blue-500 hover:underline"
                     onClick={() => handleSelectedData(row)}
@@ -41,6 +53,52 @@ const Division: React.FC = () => {
         },
     ];
 
+    useEffect(() => {
+        if (isUpdating) {
+            toast.info("Memperbarui data divisi", { position: "top-right" });
+            return;
+        }
+
+        if (updateError) {
+            toast.error("Gagal memperbarui data divisi", {
+                position: "top-right",
+            });
+        }
+
+        if (isUpdated) {
+            toast.success("Berhasil memperbarui data divisi", {
+                position: "top-right",
+            });
+
+            setShowPopup(false);
+
+            const timeout = setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [isUpdating]);
+
+    useEffect(() => {
+        if (isDeleting) {
+            toast.info("Menghapus data divisi", { position: "top-right" });
+            return;
+        }
+
+        if (deleteError) {
+            toast.error("Gagal menghapus data divisi", {
+                position: "top-right",
+            });
+        }
+
+        if (isDeleted) {
+            toast.success("Berhasil menghapus data divisi", {
+                position: "top-right",
+            });
+
+            setShowPopup(false);
+        }
+    }, [isDeleting]);
 
     return (
         <DefaultLayout>
@@ -53,8 +111,21 @@ const Division: React.FC = () => {
                 addButtonLink="/division/addData"
                 addButtonName="Tambah Divisi"
             />
-            <Modal idItem={selectedData.id} title="Edit Divisi" state={showPopup} stateSetter={setShowPopup} ableUpdate={true} mutation={updateDivision}>
-                <InputFields title="Nama Divisi" name="nama" defaultValue={selectedData.nama}/>
+            <Modal
+                idItem={selectedData.id}
+                title="Edit Divisi"
+                state={showPopup}
+                stateSetter={setShowPopup}
+                ableUpdate={true}
+                ableDelete={true}
+                mutation={updateDivision}
+                deleteMutation={deleteDivision}
+            >
+                <InputFields
+                    title="Nama Divisi"
+                    name="nama"
+                    defaultValue={selectedData.nama}
+                />
             </Modal>
         </DefaultLayout>
     );

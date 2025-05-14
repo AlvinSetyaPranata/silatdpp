@@ -3,19 +3,21 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import useFetch from "@/hooks/useFetch";
+import { useAddDivisionMutation } from "@/services/division/endpoints";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
-import { useStore } from "react-redux";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
 const Page: React.FC = () => {
-    const [isPending, fetchCaller] = useFetch();
     const [errors, setErrors] = useState({});
+
     const router = useRouter();
-    const store = useStore();
-    const authState = store.getState().auth;
+
+    const [
+        addDvision,
+        { isLoading: isAdding, isSuccess: successAdding, isError: errorAdding },
+    ] = useAddDivisionMutation();
 
     const schema = z.object({
         nama: z.string().min(1, "Nama divisi tidak boleh kosong!"),
@@ -27,30 +29,40 @@ const Page: React.FC = () => {
         const formData = event.currentTarget;
         const data = new FormData(formData);
 
-
-        const res = schema
-            .safeParse({ nama: data.get("nama") })
+        const res = schema.safeParse({ nama: data.get("nama") });
 
         if (!res.success) {
             setErrors(res.error.flatten().fieldErrors);
             return;
         }
 
-        await fetchCaller("divisi", {
-            method: "POST",
-            headers: {
-                Authorization: authState.token,
-            },
-            body: data,
-        })
-            .then(() => {
-                toast.success("Data divisi berhasil ditambahkan!", {
-                    position: "top-right",
-                });
-                router.push("/division");
-            })
-            .catch(() => console.log("Error saat menambah data"));
+        await addDvision(data);
     };
+
+    useEffect(() => {
+        if (isAdding) {
+            toast.info("Menambahkan data divisi", { position: "top-right" });
+            return;
+        }
+
+        if (errorAdding) {
+            toast.error("Gagal menambahkan data divisi", {
+                position: "top-right",
+            });
+        }
+
+        if (successAdding) {
+            toast.success("Berhasil menambahkan data divisi", {
+                position: "top-right",
+            });
+
+            const timeout = setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [isAdding]);
 
     return (
         <DefaultLayout>
@@ -64,19 +76,28 @@ const Page: React.FC = () => {
                     name="nama"
                     error={errors.nama ? errors.nama[0] : ""}
                 />
-                <button
-                    className="col-span-2 flex w-max justify-center rounded bg-primary p-3 text-sm font-medium text-gray hover:bg-opacity-90"
-                    type="submit"
-                >
-                    {isPending ? (
-                        <>
-                            <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                            Menambahkan Data
-                        </>
-                    ) : (
-                        <>Tambahkan Divisi</>
-                    )}
-                </button>
+                <div className="col-span-2 flex gap-x-4">
+                    <button
+                        className="flex w-max justify-center rounded bg-primary p-3 text-sm font-medium text-gray hover:bg-opacity-90"
+                        type="submit"
+                    >
+                        {isAdding ? (
+                            <>
+                                <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                                Menambahkan Divisi..
+                            </>
+                        ) : (
+                            <>Tambahkan Divisi</>
+                        )}
+                    </button>
+                    <button
+                        className="flex w-max justify-center rounded bg-red-500 p-3 text-sm font-medium text-gray hover:bg-opacity-90"
+                        type="button"
+                        onClick={() => router.push("/division")}
+                    >
+                        Kembali
+                    </button>
+                </div>
             </form>
         </DefaultLayout>
     );

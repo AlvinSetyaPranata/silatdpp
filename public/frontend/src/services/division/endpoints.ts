@@ -4,15 +4,32 @@ import { DivisionApiSlice } from "./base";
 export const divisionApi = DivisionApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDivisions: builder.query({
-      query: () => "/divisi",
+      query: () => "",
       providesTags: ['Divisions']
     }),
     getDivisionById: builder.query({
-      query: (id) => `/divisi/${id}`
+      query: (id) => `/${id}`
     }),
+
+    addDivision: builder.mutation({
+      query: (form) => ({
+        url: "",
+        method: "POST",
+        body: new URLSearchParams(form),
+      }),
+      invalidatesTags: ['Divisions'],
+    }),
+    deleteDivision: builder.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ['Divisions'],
+    }),
+
     updateDivision: builder.mutation({
       query: ({ idItem, form }) => ({
-        url: `/divisi/${idItem}`,
+        url: `/${idItem}`,
         method: "PUT",
         body: new URLSearchParams(form),
       }),
@@ -21,4 +38,4 @@ export const divisionApi = DivisionApiSlice.injectEndpoints({
   })
 })
 
-export const { useGetDivisionsQuery, useGetDivisionByIdQuery, useUpdateDivisionMutation } = divisionApi;
+export const { useGetDivisionsQuery, useGetDivisionByIdQuery, useUpdateDivisionMutation, useAddDivisionMutation, useDeleteDivisionMutation } = divisionApi;
