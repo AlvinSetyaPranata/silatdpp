@@ -3,19 +3,37 @@ import { NewsApiSlice } from "./base";
 
 export const newsApi = NewsApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getPermissions: builder.query({
-      query: () => "/hak-akses",
+    getNews: builder.query({
+      query: () => "",
       providesTags: ["News"]
     }),
-    updatePermission: builder.mutation({
+
+    addNews: builder.mutation({
+      query: (form) => ({
+        url: "",
+        method: "POST",
+        body: form
+      }),
+      invalidatesTags: ["News"]
+    }),
+
+    deleteNews: builder.mutation({
+      query: (idItem) => ({
+        url: `/${idItem}`,
+        method: "DELETE"
+      }),
+      invalidatesTags: ["News"]
+    }),
+
+    updateNews: builder.mutation({
       query: ({ idItem, form }) => ({
-        url: `/hak-akses/${idItem}`,
+        url: `/${idItem}`,
         method: 'PUT',
-        body: new URLSearchParams(form)
+        body: form
       }),
       invalidatesTags: ["News"]
     })
   })
 })
 
-export const { useGetPermissionsQuery, useUpdatePermissionMutation } = newsApi;
+export const { useGetNewsQuery, useAddNewsMutation, useDeleteNewsMutation, useUpdateNewsMutation } = newsApi;

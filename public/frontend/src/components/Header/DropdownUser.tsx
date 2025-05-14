@@ -9,17 +9,17 @@ import {  DEFAULT_PROFILE_DATA } from "@/utils/constans";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useGetAllUserQuery } from "@/services/staff/endpoints";
+import { storeType } from "@/store";
 
 const DropdownUser = () => {
-    const store = useStore();
-    const state = store.getState();
+    const state = useStore().getState() as storeType;
     const authState = state.auth;
     const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [data, setData] = useState(DEFAULT_PROFILE_DATA)
+    const [data, setData] = useState<Record<string, string>>({})
 
 
-    const { data: userData } = useGetAllUserQuery()
+    const { data: userData } = useGetAllUserQuery({})
 
     const handleLogout = async () => {
         const res = await fetch(
@@ -46,29 +46,15 @@ const DropdownUser = () => {
 
     const getRole = () => {
 
-        if (!data) return
+        if (!data || Object.keys(data).length <= 0) return
 
         if (!data.roles[0]) return "Tidak Ditugaskan"
-        
-        // temp
-        // if (!data.roles) return "Tidak Ditugaskan"
-
-
+    
         return data.roles[0].name
     }
 
     useEffect(() => {
-
-        if (!userData) return
-        
-        
-        const user = userData.data.filter(userData => userData.name == authState.user.name)
-        
-        if (!user) {
-            return
-        } 
-
-        setData(user[0])
+        setData(authState.user)
     }, [userData])
 
 

@@ -1,11 +1,12 @@
-import { baseApiSlice } from "../base";
+import { StaffApiSlice } from "./base";
 
 
-export const userApi = baseApiSlice.injectEndpoints({
+export const userApi = StaffApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllUser: builder.query({
-      query: () => "/karyawan"
-    })
+      query: () => "",
+      providesTags: ["Staffs"]
+    }),
   })
 })
 
