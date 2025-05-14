@@ -4,18 +4,20 @@ import Breadcrumb from "@/components/Breadcrumb"
 import InputFields from "@/components/Fields/InputFields"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import useFetch from "@/hooks/useFetch"
+import { useAddTransportationMutation, useUpdateTransportationMutation } from "@/services/transportatition/endpoints"
+import { storeType } from "@/store"
 import { useRouter } from "next/navigation"
-import React, { FormEvent, useState } from "react"
+import React, { FormEvent, useEffect, useState } from "react"
 import { useStore } from "react-redux"
 import { toast } from "react-toastify"
 import { z } from "zod"
 
 const TransportAddPage: React.FC = () => {
-    const [isPending, fetchCaller] = useFetch();
     const [errors, setErrors] = useState({})
-    const state = useStore().getState()
     const router = useRouter()
 
+
+    const [addTransport, { isLoading: isAdding, isSuccess: successAdding, isError: errorAdding }] = useAddTransportationMutation()
 
 
     const formSchema = z.object({
@@ -42,29 +44,34 @@ const TransportAddPage: React.FC = () => {
             return
         }
 
-        await fetchCaller('transportasi', {
-            method: 'post',
-            headers: {
-                Authorization: `Bearer ${state.token}`
-            },
-            body: form,
-        })
-            .then(res => {
+        await addTransport(form)
+    }
 
-                if (!res.ok) {
-                    toast.error("Gagal Saaat menambahkan data!", {
-                        position: "top-right",
-                    })
-                    return   
-                };
 
-                toast.success("Data transportas berhasil ditambahkan!", {
+    useEffect(() => {
+            if (isAdding) {
+                toast.info("Menambahkan data transportasi", { position: "top-right" });
+                return;
+            }
+    
+            if (errorAdding) {
+                toast.error("Gagal menambahkan data transportasi", {
                     position: "top-right",
                 });
-                router.push("/transport")
-            })
-           
-    }
+            }
+    
+            if (successAdding) {
+                toast.success("Berhasil menambahkan data transportasi", {
+                    position: "top-right",
+                });
+    
+                const timeout = setTimeout(() => {
+                    router.push("/transport")
+                }, 1000);
+    
+                return () => clearTimeout(timeout);
+            }
+        }, [isAdding]);
 
     return (
         <DefaultLayout>
@@ -72,19 +79,23 @@ const TransportAddPage: React.FC = () => {
             <form onSubmit={handlePostData} className="grid grid-cols-2 gap-9 rounded-sm border border-stroke bg-white px-6.5 py-4 shadow-default dark:border-strokedark dark:bg-boxdark">
                 <InputFields name="nama" title="Nama Transportasi" error={errors.nama ? errors.nama[0] : ""} />
                 <InputFields name="jenis" title="Jenis Transportasi" error={errors.jenis ? errors.jenis[0] : ""} />
-                <button
-                    type="submite"
-                    className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 w-max"
-                >
-                    {isPending ? (
-                        <div className="flex gap-x-4">
-                            <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                            Menambahkan
-                        </div>
-                    ) : (
-                        <> Tambah Transportasi</>
-                    )}
-                </button>
+                <div className="flex col-span-2 gap-x-4">
+                     <button onClick={() => router.push("/transport")} className="flex justify-center rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90 w-max">Kembali</button>
+                    <button
+                        type="submit"
+                        className="flex justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 w-max"
+                    >
+                        {isAdding ? (
+                            <div className="flex gap-x-4">
+                                <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                                Menambahkan
+                            </div>
+                        ) : (
+                            <> Tambah Transportasi</>
+                        )}
+                    </button>
+                   
+                </div>
             </form>
         </DefaultLayout>
     )
