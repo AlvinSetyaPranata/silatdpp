@@ -10,7 +10,7 @@ import Modal from "@/components/Modal";
 import Detail from "@/components/Recomendation/Detail";
 import Table from "@/components/Table";
 import useFetch from "@/hooks/useFetch";
-import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetInstitutionsQuery } from "@/services/Institution/endpoints";
 import { useGetPartnersQuery } from "@/services/partner/endpoints";
 import {
     useGetRecomendationsQuery,

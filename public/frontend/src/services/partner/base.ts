@@ -2,7 +2,7 @@ import { storeType } from "@/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const PartnerApiSlice = createApi({
-    reducerPath: "partnerApi",
+    reducerPath: "PartnerApi",
     baseQuery: fetchBaseQuery({ 
         baseUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/mitra`,
         prepareHeaders: (headers, {getState}) => {

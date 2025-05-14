@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import useFetch from "@/hooks/useFetch";
 import { z } from "zod";
 import { useGetGuestBooksQuery } from "@/services/guest-book/endpoints";
-import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetInstitutionsQuery } from "@/services/Institution/endpoints";
 import { useGetDivisionsQuery } from "@/services/division/endpoints";
 
 export default function GuestBookDetail() {

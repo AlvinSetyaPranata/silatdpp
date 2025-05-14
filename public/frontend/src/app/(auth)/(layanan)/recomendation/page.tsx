@@ -6,7 +6,7 @@ import InputFields from "@/components/Fields/InputFields";
 import SelectFields from "@/components/Fields/SelectFields";
 import TextFields from "@/components/Fields/TextFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetInstitutionsQuery } from "@/services/Institution/endpoints";
 import { useGetPartnersQuery } from "@/services/partner/endpoints";
 import { FormEvent, useEffect, useState } from "react";
 import { useStore } from "react-redux";

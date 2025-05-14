@@ -11,7 +11,7 @@ import {
     useGetCertificatesQuery,
     useUpdateCertificateMutation,
 } from "@/services/cerificates/endpoints";
-import { useGetInstitutionsQuery } from "@/services/Institution/institution";
+import { useGetInstitutionsQuery } from "@/services/Institution/endpoints";
 import { DEFAULT_CERTIFICATE_DATA } from "@/utils/constans";
 import { useState } from "react";
 

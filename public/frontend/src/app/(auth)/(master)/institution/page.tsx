@@ -6,7 +6,7 @@ import { INSTITUTION_DEFAULT_DATA } from "@/utils/constans";
 import Modal from "@/components/Modal";
 import React, { useEffect, useState } from "react";
 import InputFields from "@/components/Fields/InputFields";
-import { useDeleteInstitutionMutation, useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/Institution/institution";
+import { useDeleteInstitutionMutation, useGetInstitutionsQuery, useUpdateInstitutionMutation } from "@/services/Institution/endpoints";
 import Breadcrumb from "@/components/Breadcrumb";
 import { toast } from "react-toastify";
 

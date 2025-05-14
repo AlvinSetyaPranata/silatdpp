@@ -3,7 +3,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import InputFields from "@/components/Fields/InputFields";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { useAddInstitutionMutation } from "@/services/Institution/institution";
+import { useAddInstitutionMutation } from "@/services/Institution/endpoints";
 import { storeType } from "@/store";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -14,8 +14,6 @@ import { z } from "zod";
 export default function InstitutionAddData() {
     const [errors, setErrors] = useState({});
     const router = useRouter();
-    const state = useStore().getState() as storeType;
-    const authState = state.auth;
 
     const [addInstitution, { isLoading: isAdding, isSuccess: successAdding, isError: errorAdding }] = useAddInstitutionMutation();
 
