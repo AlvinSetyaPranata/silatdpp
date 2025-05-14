@@ -15,7 +15,7 @@ const Page: React.FC = () => {
     const router = useRouter();
 
     const [
-        addDvision,
+        addDivision,
         { isLoading: isAdding, isSuccess: successAdding, isError: errorAdding },
     ] = useAddDivisionMutation();
 
@@ -36,7 +36,7 @@ const Page: React.FC = () => {
             return;
         }
 
-        await addDvision(data);
+        await addDivision(data);
     };
 
     useEffect(() => {
